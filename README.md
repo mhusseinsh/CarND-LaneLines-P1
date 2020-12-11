@@ -1,56 +1,68 @@
 # **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+## Writeup Template
 
-Overview
+### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
+
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+**Finding Lane Lines on the Road**
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
-
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
-
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+The goals / steps of this project are the following:
+* Make a pipeline that finds lane lines on the road
+* Reflect on your work in a written report
 
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+[//]: # (Image References)
 
-1. Describe the pipeline
+[image1]: ./examples/grayscale.jpg "Grayscale"
 
-2. Identify any shortcomings
-
-3. Suggest possible improvements
-
-We encourage using images in your writeup to demonstrate how your pipeline works.  
-
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
-
-
-The Project
 ---
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+### Reflection
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) if you haven't already.
+### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-**Step 2:** Open the code in a Jupyter Notebook
+Overview:
+Lane detection is an important foundation in the development of intelligent vehicles. To reach levels of autonomy, this algorithm need to be implemented in the vehicle to be able for the car to know where exactly it is driving.
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out [Udacity's free course on Anaconda and Jupyter Notebooks](https://classroom.udacity.com/courses/ud1111) to get started.
+This project aims to find lanes using classical opencv approaches. To find lanes, we will use [Canny Edge Detection](https://docs.opencv.org/master/da/d22/tutorial_py_canny.html) to detect edges in a pre-processed gray image. After getting the edges, [Hough Line Transformation](https://docs.opencv.org/3.4/d9/db0/tutorial_hough_lines.html) will be used to find lines which we will overlay on the image.
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
 
-`> jupyter notebook`
+My pipeline consisted of several steps:
+1- Converting the image to grayscale using the [cvtColor()](https://docs.opencv.org/master/d8/d01/group__imgproc__color__conversions.html#ga397ae87e1288a81d2363b61574eb8cab) method.
+2- Before applying the Canny algorithm, we need to smoothen the image to be able to supress the noise. Here, [Gaussian Blur](https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gaabe8c836e97159a9193fb0b11ac52cf1) with kernel size of 5 is used.
+3- To detect the edges of the lanes, Canny Edge Detector is used. This algorithm works by using the pixel gradient values then filters the provided image according to the Lower and Higher threshold which are two passed arguments. All pixels which lie below this lower threshold are ignored, while others above the higher threshold are accepted. Moreover, the pixels which lie in between the lower and the higher threholds are accepted if they connect with the pixels above the higher threshold.
+The ration between thresholds which are normally used are 1:2 or 1:3, in this case, I used 1:2, with a values of 50 and 150.
+4- Since normally the lines lie in the lower center part of the image, then choosing a region of interest will help in identifying the lines easier and gives a higher probability in this task. Accordingly, a Region of Interest (ROI) with of a trapeziodal polygon shape is chosen. The area which lie outside this ROI is excluded.
+5- Afterwards the Hough Line Transform is applied to be able to find the lines which is detected in the corresponding ROI.
+6- To be able to draw the lines on the image and produce the final result, [addWeighted()](https://docs.opencv.org/3.4/d2/de8/group__core__array.html#gafafb2513349db3bcff51f54ee5592a19) is used to take the blank image (which is the Hough Transform output) with only lines on it, and a copy of the original image. Then it overlays the lines on the original image and returns the output.
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
+In order to draw a single line on the left and right lanes, the draw_lines() function is mopdified. There are multiple lines that can be detected for a lane line (especially if they are separated in the street image). In order to overcome this problem, it is needed to work on an averaged line method for that.
+The task is to simply extrapolate all the lines to cover full lane line length for partially recognized lane lines.
+As a final output, two lane lines should be drawn: one for the left and the other for the right. The left line has a positive slope, while the right one should gas a negative slope. Hence, the slopes for the lines should be computed, and then separated and collected. The positive slopes will be stored separately from the negative ones, and afterwards thei averages will be taken.
+Therefore, we’ll collect positive slope lines and negative slope lines separately and take their averages.
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
 
+If you'd like to include images to show how the pipeline works, here is how to include an image: 
+
+![alt text][image1]
+
+
+### 2. Identify potential shortcomings with your current pipeline
+
+
+There are potential shortcomings with this task:
+1- Tuning parameters is considered to be very tricky for this task. Choosing the correct parameters for the Hough Line Transform is not always easy. Finding the correct trade-off between the 4 parameters need to be further investigated. "Trial and Error" to retrieve the hyper-parameters is not the best way to do so.
+2- Due to the reason that Hough Lines are based on straight lines do not work good for curved lines, so having such curve lines in the image, will not be easily translated to detected straight lines. 
+3- The ROI may not always be fixed. An assumption was made about the position of the lines in the image, which may not always be valid. This assumption is due that the camera is always mounted/fixed in the same position and lanes are flat.
+4- In more challenging scenes, portions from the lines may be disappearing, which simply makes it even harder for this pipeline to keep being stable.
+5- One more shortcoming would be the uneven color of the road surface in parts of the scenes, where there are typically some tire markings which causes change in color surface.
+6- There are some roads in general which do not detect any lane markings, however, finding the ego lane is important. This means that our pipeline will not work in such scenarios.
+
+
+### 3. Suggest possible improvements to your pipeline
+
+A possible improvement would be definetly having an optimization search method to discover the parameters and choose the best set based on some KPI values. Another improvement could be having a dynamic ROI which changes according to some features inside the image, either road curvature, or speed of the vehicle or even road slopes. Moreover, using Color Selection algortihm along with the current pipeline will aid in lanes detection and help improving the results thus avoiding or fitting to curvy lines. Furthermore, it can be considered to collect a mean of n last detected lines. This will be helpful to be able to calculate the next line, so it will help in avoiding the errors
