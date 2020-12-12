@@ -46,11 +46,7 @@ In order to draw a single line on the left and right lanes, the draw_lines() fun
 The task is to simply extrapolate all the lines to cover full lane line length for partially recognized lane lines.
 As a final output, two lane lines should be drawn: one for the left and the other for the right. The left line has a negative slope, while the right one should have a positive slope. Hence, the slopes for the lines should be computed, and then separated and collected. The positive slopes will be stored separately from the negative ones, and afterwards their averages will be taken and extrapolation will be calculated.
 ![alt text][image8]
-Videos:
-![](./test_videos_output/solidWhiteRight.mp4)
-<video width="960" height="540" controls>
-  <source src="./test_videos_output/solidWhiteRight.mp4" type="video/mp4">
-</video>
+
 ### 2. Identify potential shortcomings with your current pipeline
 
 There are potential shortcomings with this task:
