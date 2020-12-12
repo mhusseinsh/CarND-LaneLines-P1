@@ -13,6 +13,7 @@ The goals / steps of this project are the following:
 [image3]: ./output_images_split/solidWhiteRight_blur.jpg "Blur"
 [image4]: ./output_images_split/solidWhiteRight_edges.jpg "Edges"
 [image5]: ./output_images_split/solidWhiteRight_roi.jpg "Target"
+[image5-]: ./output_images_split/solidWhiteRight_target.jpg "FullTarget"
 [image6]: ./output_images_split/solidWhiteRight_lines.jpg "Lines"
 [image7]: ./output_images_split/solidWhiteRight_result.jpg "Result"
 [image8]: ./output_images/solidWhiteRight_result.jpg "ResultFull"
@@ -38,6 +39,7 @@ The ration between thresholds which are normally used are 1:2 or 1:3, in this ca
 ![alt text][image4]
 4- Since normally the lines lie in the lower center part of the image, then choosing a region of interest will help in identifying the lines easier and gives a higher probability in this task. Accordingly, a Region of Interest (ROI) with of a trapeziodal polygon shape is chosen. The area which lie outside this ROI is excluded.
 ![alt text][image5]
+![alt text][image5-]
 5- Afterwards the Hough Line Transform is applied to be able to find the lines which is detected in the corresponding ROI.
 ![alt text][image6]
 6- To be able to draw the lines on the image and produce the final result, [addWeighted()](https://docs.opencv.org/3.4/d2/de8/group__core__array.html#gafafb2513349db3bcff51f54ee5592a19) is used to take the blank image (which is the Hough Transform output) with only lines on it, and a copy of the original image. Then it overlays the lines on the original image and returns the output.
