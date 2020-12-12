@@ -8,14 +8,14 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./output_images_split/solidWhiteCurve_input.jpg "Input Image"
-[image2]: ./output_images_split/solidWhiteCurve_gray.jpg "Grayscale"
-[image3]: ./output_images_split/solidWhiteCurve_blur.jpg "Blur"
-[image4]: ./output_images_split/solidWhiteCurve_edges.jpg "Edges"
-[image5]: ./output_images_split/solidWhiteCurve_roi.jpg "Target"
-[image6]: ./output_images_split/solidWhiteCurve_lines.jpg "Lines"
-[image7]: ./output_images_split/solidWhiteCurve_result.jpg "Result"
-[image8]: ./output_images/solidWhiteCurve_result.jpg "ResultFull"
+[image1]: ./output_images_split/solidWhiteRight_input.jpg "Input Image"
+[image2]: ./output_images_split/solidWhiteRight_gray.jpg "Grayscale"
+[image3]: ./output_images_split/solidWhiteRight_blur.jpg "Blur"
+[image4]: ./output_images_split/solidWhiteRight_edges.jpg "Edges"
+[image5]: ./output_images_split/solidWhiteRight_roi.jpg "Target"
+[image6]: ./output_images_split/solidWhiteRight_lines.jpg "Lines"
+[image7]: ./output_images_split/solidWhiteRight_result.jpg "Result"
+[image8]: ./output_images/solidWhiteRight_result.jpg "ResultFull"
 ---
 
 ### Reflection

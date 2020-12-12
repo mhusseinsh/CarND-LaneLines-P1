@@ -190,9 +190,9 @@ else:
     # Define the Hough transform parameters
     rho = 1 # distance resolution in pixels of the Hough grid
     theta = np.pi/180 # angular resolution in radians of the Hough grid
-    threshold = 15     # minimum number of votes (intersections in Hough grid cell)
-    min_line_length = 40 #minimum number of pixels making up a line
-    max_line_gap = 20    # maximum gap in pixels between connectable line segments
+    threshold = 5     # minimum number of votes (intersections in Hough grid cell)
+    min_line_length = 10 #minimum number of pixels making up a line
+    max_line_gap = 10    # maximum gap in pixels between connectable line segments
 
 check_dir(output_directory)
 for idx, file in enumerate(images):
